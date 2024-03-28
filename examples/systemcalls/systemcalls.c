@@ -38,7 +38,7 @@ bool do_system(const char *cmd)
 */
 
 bool do_exec(int count, ...)
-{
+{   int retval;
     va_list args;
     va_start(args, count);
     char * command[count+1];
@@ -57,8 +57,7 @@ bool do_exec(int count, ...)
 	if (p==0){
 
 	execv(command[0],(command+1));
-     va_end(args);
-
+     
 	return false;
 		
 
@@ -69,8 +68,11 @@ bool do_exec(int count, ...)
 
 
 	{
-	wait(NULL);
 
+	wait(&retval);
+    if(retval!=0)
+        return false;
+    else return true ;
 
 
 	}
