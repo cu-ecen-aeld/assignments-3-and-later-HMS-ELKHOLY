@@ -57,6 +57,8 @@ bool do_exec(int count, ...)
 	if (p==0){
 
 	execv(command[0],(command+1));
+     va_end(args);
+
 	return false;
 		
 
@@ -68,7 +70,6 @@ bool do_exec(int count, ...)
 
 	{
 	wait(NULL);
-	return true ;
 
 
 
@@ -121,12 +122,16 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
     	if (dup2(fd, 1) < 0) { perror("dup2"); abort(); }
     		close(fd);
     		execvp(command[0], (command+1)); 
+                va_end(args);
+
             return true;
         perror("execvp"); 
 		
         abort();
         
   	default:
+    va_end(args);
+
     	close(fd);
         return false;
     /* do whatever the parent wants to do. */
@@ -140,7 +145,6 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
  *
 */
 
-    va_end(args);
 
     return true;
 }
