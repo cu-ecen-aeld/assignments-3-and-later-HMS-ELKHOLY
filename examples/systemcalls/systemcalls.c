@@ -50,7 +50,29 @@ bool do_exec(int count, ...)
     command[count] = NULL;
     // this line is to avoid a compile warning before your implementation is complete
     // and may be removed
-    command[count] = command[count];
+    //command[count] = command[count];
+	pid_t p =fork();
+	//bool flag=true;
+
+	if (p==0){
+
+	execv(command[0],(command+1));
+	return false;
+		
+
+	}
+
+
+	else if (p>0) 
+
+
+	{
+	wait(NULL);
+	return true ;
+
+
+
+	}
 
 /*
  * TODO:
@@ -87,7 +109,28 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
     // this line is to avoid a compile warning before your implementation is complete
     // and may be removed
     command[count] = command[count];
-
+	int kidpid;
+	int fd = open("redirected.txt", O_WRONLY|O_TRUNC|O_CREAT, 0644);
+	if (fd < 0) { perror("open"); 
+		abort(); }
+	switch (kidpid = fork()) {
+  	case -1:
+		 perror("fork"); 
+		abort();
+  	case 0:
+    	if (dup2(fd, 1) < 0) { perror("dup2"); abort(); }
+    		close(fd);
+    		execvp(command[0], (command+1)); 
+            return true;
+        perror("execvp"); 
+		
+        abort();
+        
+  	default:
+    	close(fd);
+        return false;
+    /* do whatever the parent wants to do. */
+    }
 
 /*
  * TODO
