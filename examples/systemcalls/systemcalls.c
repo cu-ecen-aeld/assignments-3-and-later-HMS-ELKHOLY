@@ -16,6 +16,9 @@ bool do_system(const char *cmd)
  *   and return a boolean true if the system() call completed with success
  *   or false() if it returned a failure
 */
+	if(0!=system(cmd))
+		return fasle;
+
 
     return true;
 }
@@ -58,6 +61,7 @@ bool do_exec(int count, ...)
  *   as second argument to the execv() command.
  *
 */
+
 
     va_end(args);
 
