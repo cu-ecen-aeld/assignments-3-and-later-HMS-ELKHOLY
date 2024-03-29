@@ -143,12 +143,12 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
         }
         close(fd);
         execvp(command[0], (command));
-       // va_end(args);
-        perror("execvp");
-        return false;
-        
+        va_end(args);
 
-        //abort();
+        return true;
+        perror("execvp");
+
+        abort();
 
  //   default:
        
