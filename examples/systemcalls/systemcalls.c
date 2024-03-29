@@ -81,7 +81,7 @@ bool do_exec(int count, ...)
     else if (WIFEXITED(retval))
     {
         // printf("%d\n",retval);
-        //fflush(stdout);
+        fflush(stdout);
         // printf("ASAS");
         if (WEXITSTATUS(retval) == 0)
             return true;
@@ -143,12 +143,12 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
         }
         close(fd);
         execvp(command[0], (command));
-        va_end(args);
-
-        return true;
+       // va_end(args);
         perror("execvp");
+        return false;
+        
 
-        abort();
+        //abort();
 
  //   default:
        
