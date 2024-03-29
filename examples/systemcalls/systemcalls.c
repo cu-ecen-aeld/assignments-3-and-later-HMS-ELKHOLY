@@ -39,7 +39,7 @@ bool do_system(const char *cmd)
 */
 
 bool do_exec(int count, ...)
-{   int retval;
+{   
     va_list args;
     va_start(args, count);
     char * command[count+1];
@@ -49,34 +49,52 @@ bool do_exec(int count, ...)
         command[i] = va_arg(args, char *);
     }
     command[count] = NULL;
+    //printf("%s \n  %s \n " ,command[0], *(command+2));
     // this line is to avoid a compile warning before your implementation is complete
     // and may be removed
     //command[count] = command[count];
 	pid_t p =fork();
 	//bool flag=true;
 
-	if (p==0){
-
-	execv(command[0],(command+1));
-    
-     
- 	exit(1);	
-
-	}
-
-
-	else if (p>0) 
-
-
-	{
-
-	wait(&retval);
-    if(retval!=0)
+	if (p==-1)
+    {
+        perror("errorfork");
         return false;
-    else return true ;
+    }
+    else if 
+     (p==0){
 
+	if(-1==execv(command[0],(command)))
+   {
+    perror("errorexecv");
+    
+   //
+ 	return false;	
+    } 
+    exit(EXIT_FAILURE);  
 
 	}
+    
+	 
+    int retval;
+  
+	if(-1==waitpid(p,&retval,0))
+        return false;
+    else if(WIFEXITED(retval)){
+          //printf("%d\n",retval);
+        fflush(stdout);
+        //printf("ASAS");
+         if (WEXITSTATUS(retval)==0)
+                return true;
+        else
+            return false;
+        
+      
+   
+    }
+       
+
+	
 
 /*
  * TODO:
@@ -91,7 +109,7 @@ bool do_exec(int count, ...)
 
     va_end(args);
 
-    return true;
+    return false;
 }
 
 /**
@@ -124,7 +142,7 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
   	case 0:
     	if (dup2(fd, 1) < 0) { perror("dup2"); abort(); }
     		close(fd);
-    		execvp(command[0], (command+1)); 
+    		execvp(command[0], (command)); 
                 va_end(args);
 
             return true;
