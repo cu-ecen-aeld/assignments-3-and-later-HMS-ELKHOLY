@@ -81,7 +81,7 @@ bool do_exec(int count, ...)
     else if (WIFEXITED(retval))
     {
         // printf("%d\n",retval);
-        fflush(stdout);
+        //fflush(stdout);
         // printf("ASAS");
         if (WEXITSTATUS(retval) == 0)
             return true;
