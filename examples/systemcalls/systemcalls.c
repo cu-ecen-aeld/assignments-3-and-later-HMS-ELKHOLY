@@ -69,7 +69,7 @@ bool do_exec(int count, ...)
             perror("errorexecv");
 
             //
-            return false;
+           
         }
         exit(EXIT_FAILURE);
     }
