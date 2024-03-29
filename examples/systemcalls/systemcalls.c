@@ -150,12 +150,27 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
 
         abort();
 
-    default:
-        va_end(args);
+ //   default:
+       
+        /* do whatever the parent wants to do. */
+    }
+    va_end(args);
 
         close(fd);
+        
+    int retval;
+
+    if (-1 == waitpid(kidpid, &retval, 0))
         return false;
-        /* do whatever the parent wants to do. */
+    else if (WIFEXITED(retval))
+    {
+        // printf("%d\n",retval);
+        //fflush(stdout);
+        // printf("ASAS");
+        if (WEXITSTATUS(retval) == 0)
+            return true;
+        else
+            return false;
     }
 
     /*
